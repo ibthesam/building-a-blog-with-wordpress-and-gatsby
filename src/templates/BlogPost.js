@@ -1,27 +1,36 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from "../components/layout.js"
+import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-const PageTemplate = ({ data }) => (
+const BlogPostTemplate = ({ data }) => (
   <Layout>
     <SEO
-      title={data.wordpressPage.title}
-      description={data.wordpressPage.excerpt}
+      title={data.wordpressPost.title}
+      description={data.wordpressPost.excerpt}
     />
-    <h1>{data.wordpressPage.title}</h1>
-    <div dangerouslySetInnerHTML={{ __html: data.wordpressPage.content }} />
+    <h1>{data.wordpressPost.title}</h1>
+    <p>
+      Written by {data.wordpressPost.author.name} on {data.wordpressPost.date}
+    </p>
+    <div
+      style={{ marginTop: 20 }}
+      dangerouslySetInnerHTML={{ __html: data.wordpressPost.content }}
+    />
   </Layout>
 )
-
-export default PageTemplate
+export default BlogPostTemplate
 
 export const query = graphql`
   query($id: Int!) {
-    wordpressPage(wordpress_id: { eq: $id }) {
+    wordpressPost(wordpress_id: { eq: $id }) {
       title
-      excerpt
       content
+      excerpt
+      date(formatString: "MMMM DD, YYYY")
+      author {
+        name
+      }
     }
   }
 `
