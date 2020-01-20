@@ -1,27 +1,52 @@
 import React from "react"
-import { graphql } from "gatsby"
-import Layout from "../components/layout.js"
+import { graphql, Link } from "gatsby"
+
+import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-const PageTemplate = ({ data }) => (
+const IndexPage = ({ data }) => (
   <Layout>
-    <SEO
-      title={data.wordpressPage.title}
-      description={data.wordpressPage.excerpt}
-    />
-    <h1>{data.wordpressPage.title}</h1>
-    <div dangerouslySetInnerHTML={{ __html: data.wordpressPage.content }} />
+    <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
+    <ul style={{ listStyle: "none" }}>
+      {data.allWordpressPost.edges.map(post => (
+        <li style={{ padding: "20px 0", borderBottom: "1px solid #ccc" }}>
+          <Link
+            to={`/post/${post.node.slug}`}
+            style={{ display: "flex", color: "black", textDecoration: "none" }}
+          >
+            <div style={{ width: "75%" }}>
+              <h3
+                dangerouslySetInnerHTML={{ __html: post.node.title }}
+                style={{ marginBottom: 0 }}
+              />
+              <p style={{ margin: 0, color: "grey" }}>
+                Written by {post.node.author.name} on {post.node.date}
+              </p>
+              <div dangerouslySetInnerHTML={{ __html: post.node.excerpt }} />
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
   </Layout>
 )
 
-export default PageTemplate
+export default IndexPage
 
 export const query = graphql`
-  query($id: Int!) {
-    wordpressPage(wordpress_id: { eq: $id }) {
-      title
-      excerpt
-      content
+  query {
+    allWordpressPost {
+      edges {
+        node {
+          title
+          excerpt
+          slug
+          author {
+            name
+          }
+          date(formatString: "MMMM DD, YYYY")
+        }
+      }
     }
   }
 `
