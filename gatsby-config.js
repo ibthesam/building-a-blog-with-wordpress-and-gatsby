@@ -34,13 +34,13 @@ module.exports = {
         baseUrl: "gatsbypress.iamtimsmith.com",
         protocol: "https",
         hostingWPCOM: false,
-        // We will be using some advanced custom fields
-        useACF: true,
+        // We will NOT be using advanced custom fields
+        useACF: false,
         acfOptionPageIds: [],
         verboseOutput: false,
         perPage: 100,
         searchAndReplaceContentUrls: {
-          sourceUrl: "https://gatsbypress.iamtimsmith.com",
+          sourceUrl: "http://gatsbypress.iamtimsmith.com",
           replacementUrl: "https://localhost:8000",
         },
         // Set how many simultaneous requests are sent at once.
@@ -53,8 +53,8 @@ module.exports = {
           "**/tags",
           "**/taxonomies",
           "**/users",
-          "**/*/*/menus",
-          "**/*/*/menu-locations",
+          "**/*/*/menus", // <== Menu api endpoint
+          "**/*/*/menu-locations", // <== Menu api endpoint
         ],
         excludedRoutes: [],
         normalizer: function({ entities }) {
@@ -62,6 +62,7 @@ module.exports = {
         },
       },
     },
+    `gatsby-plugin-sass`,
     `gatsby-plugin-sitemap`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
